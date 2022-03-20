@@ -24,6 +24,7 @@ export interface ITableBaseProps {
 	rowConfigs: ThinField[];
 	columnConfigs: ThinField[];
 	valueConfigs: ThinField[];
+	filterConfigs: any
 }
 
 export const NEED_FORMAT_TEXT_TYPES = new Set([
@@ -104,11 +105,13 @@ export class TableBase {
 	private rowConfigs: ThinField[];
 	private columnConfigs: ThinField[];;
 	private valueConfigs: ThinField[];
+	private filterConfigs: any;
 
   constructor (props: ITableBaseProps) {
 		this.rowConfigs = props.rowConfigs;
 		this.columnConfigs = props.columnConfigs;
 		this.valueConfigs = props.valueConfigs;
+		this.filterConfigs = props.filterConfigs;
 	}
 
 	// 检查值是否有效
@@ -130,8 +133,26 @@ export class TableBase {
 		const isRowSplitMultipleValue = _isRowSplitMultipleValue && SPLIT_TYPE_MAP.has(rowFieldType);
 		const isColumnSplitMultipleValue = _isColumnSplitMultipleValue && SPLIT_TYPE_MAP.has(columnFieldType);
 		const resultData: any[] = [];
+		
+		
+		// 在这里筛选数据
+		// 1、拿到schema筛选配置（addFilter）的数组
+		// 2、遍历数组，取出fieldId和filterValue
+		// 3、record.getCellValueString('fieldId') === filterValue
+		// const filteredRecords = records.filter(record => record.getCellValueString(record.fieldId) === a)
+		const filterConfigs = [...this.filterConfigs]
+		console.log('@@@')
+		console.log(filterConfigs)
 
-		records.forEach(record => {
+		let filteredRecords = [...records]
+
+		filterConfigs.forEach(filterConfig => {	
+			if(filterConfig?.fieldId && filterConfig?.filterValue)
+				filteredRecords = filteredRecords.filter(item => item.getCellValueString(filterConfig?.fieldId) === filterConfig?.filterValue)
+				// console.log(filteredRecords)
+		})
+
+		filteredRecords.forEach(record => {
 			const valueFieldData = {};
 			this.valueConfigs.forEach((thinField) => {
 				const { fieldId } = thinField;

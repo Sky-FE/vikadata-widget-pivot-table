@@ -32,11 +32,17 @@ export const generateSubtotalNode = (node: DrillNode) => {
 export const PivotTable: FC<ITableProps> = memo((props) => {
 	const { formData } = props;
 	const { configuration, more } = formData;
-	const { isSummary, rowSortType, columnSortType } = more;
+	const { isSummary, addFilter,rowSortType, columnSortType } = more;
 	const { rowDimensions, columnDimensions, valueDimensions, viewId } = configuration;
+
 	const fields = useFields(viewId);
 	const records = useRecords(viewId);
   const [indicatorSide] = useState('top');
+
+  const filterConfigs = useMemo(() => {
+	return addFilter.map(dim => dim);
+}, [addFilter]);
+
 
 	const handledValueDimensions = useMemo(() => {
 		return valueDimensions.map((dim, index) => {
@@ -82,6 +88,7 @@ export const PivotTable: FC<ITableProps> = memo((props) => {
 		}).filter(Boolean);
 	}, [columnDimensions, fields]);
 
+
 	// 由于 valueFields 返回的顺序与 valueFieldIds 不一致，此处再次进行排序
 	const valueConfigs = useMemo(() => {
 		return handledValueDimensions.map((dim) => {
@@ -115,6 +122,7 @@ export const PivotTable: FC<ITableProps> = memo((props) => {
 			rowConfigs, 
 			columnConfigs, 
 			valueConfigs,
+			filterConfigs
 		} as ITableBaseProps);
 	}, [rowConfigs, columnConfigs, valueConfigs]);
 

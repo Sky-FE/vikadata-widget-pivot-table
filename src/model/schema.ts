@@ -12,7 +12,7 @@ export interface ValueDimensionProps {
   statType: StatType;
 }
 
-export interface filterType {
+export interface filterInfoType {
   operatorSymbol: string;
   fieldId: string;
   filterValue: string;
@@ -27,7 +27,7 @@ export interface IFormDataProps {
   };
   more: {
     isSummary: boolean;
-    filterInfo: filterType[];
+    filterInfo: filterInfoType[];
     rowSortType: SortType;
     columnSortType: SortType;
   }

@@ -13,7 +13,7 @@ import { buildDrillTree, createAggregateFunction, StatType, Strings, serialNumbe
 import { features, useTablePipeline } from 'ali-react-table';
 import { renderer } from './renderer';
 import { CustomBaseTable } from './styled';
-import { DefaultEmptyContent } from './empty_content';
+import { DefaultEmptyContent, FilterResultEmptyContent } from './empty_content';
 
 interface ITableProps {
 	formData: IFormDataProps;
@@ -240,8 +240,9 @@ export const PivotTable: FC<ITableProps> = memo((props) => {
 			}}
 			defaultColumnWidth={150}
 			{...baseTableProps}
-			components={{
-				EmptyContent: DefaultEmptyContent
+			components={{				
+				EmptyContent: (baseTableProps.columns.length === 1 && baseTableProps.dataSource.length === 0) ? DefaultEmptyContent : FilterResultEmptyContent
+				// EmptyContent: DefaultEmptyContent 
 			}}
 		/>
 	);

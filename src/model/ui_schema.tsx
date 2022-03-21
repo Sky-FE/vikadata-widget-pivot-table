@@ -29,7 +29,7 @@ export const useGetDefaultFormData = () => {
       },
       more: {
         isSummary: true,
-        addFilter: [],
+        filterInfo: [],
         rowSortType: SortType.None,
         columnSortType: SortType.None,
       }
@@ -109,7 +109,7 @@ export const UI_SCHEMA = {
         showTitle: false,
       },
     },
-    addFilter: {
+    filterInfo: {
       "ui:options": {
         removable: false
       },

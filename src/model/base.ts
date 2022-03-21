@@ -20,11 +20,17 @@ export interface ThinField {
 	field: Field;
 };
 
+export interface filterType {
+	operatorSymbol: string;
+	fieldId: string;
+	filterValue: string;
+};
+
 export interface ITableBaseProps {
 	rowConfigs: ThinField[];
 	columnConfigs: ThinField[];
 	valueConfigs: ThinField[];
-	filterConfigs: any
+	filterInfo: filterType[]
 }
 
 export const NEED_FORMAT_TEXT_TYPES = new Set([
@@ -105,13 +111,13 @@ export class TableBase {
 	private rowConfigs: ThinField[];
 	private columnConfigs: ThinField[];;
 	private valueConfigs: ThinField[];
-	private filterConfigs: any;
+	private filterInfo: filterType[];
 
   constructor (props: ITableBaseProps) {
 		this.rowConfigs = props.rowConfigs;
 		this.columnConfigs = props.columnConfigs;
 		this.valueConfigs = props.valueConfigs;
-		this.filterConfigs = props.filterConfigs;
+		this.filterInfo = props.filterInfo;
 	}
 
 	// 检查值是否有效
@@ -136,22 +142,17 @@ export class TableBase {
 		
 		
 		// 在这里筛选数据
-		// 1、拿到schema筛选配置（addFilter）的数组
+		// 1、拿到schema筛选配置（filterInfo）的数组
 		// 2、遍历数组，取出fieldId和filterValue
-		// 3、record.getCellValueString('fieldId') === filterValue
-		// const filteredRecords = records.filter(record => record.getCellValueString(record.fieldId) === a)
-		const filterConfigs = [...this.filterConfigs]
-		console.log('@@@')
-		console.log(filterConfigs)
-
 		let filteredRecords = [...records]
 
-		filterConfigs.forEach(filterConfig => {	
-			if(filterConfig?.fieldId && filterConfig?.filterValue)
-				filteredRecords = filteredRecords.filter(item => item.getCellValueString(filterConfig?.fieldId) === filterConfig?.filterValue)
-				// console.log(filteredRecords)
-		})
-
+		if(this.filterInfo){
+			this.filterInfo.forEach(singleFilterInfo => {	
+				if(singleFilterInfo?.fieldId && singleFilterInfo?.filterValue)
+					filteredRecords = filteredRecords.filter(item => item.getCellValueString(singleFilterInfo?.fieldId) === singleFilterInfo?.filterValue)
+			})
+		}
+		
 		filteredRecords.forEach(record => {
 			const valueFieldData = {};
 			this.valueConfigs.forEach((thinField) => {

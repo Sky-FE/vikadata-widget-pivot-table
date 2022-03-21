@@ -13,7 +13,7 @@ import { buildDrillTree, createAggregateFunction, StatType, Strings, serialNumbe
 import { features, useTablePipeline } from 'ali-react-table';
 import { renderer } from './renderer';
 import { CustomBaseTable } from './styled';
-import { DefaultEmptyContent } from './empty_content';
+import { DefaultEmptyContent, FilterResultEmptyContent } from './empty_content';
 
 interface ITableProps {
 	formData: IFormDataProps;
@@ -32,11 +32,15 @@ export const generateSubtotalNode = (node: DrillNode) => {
 export const PivotTable: FC<ITableProps> = memo((props) => {
 	const { formData } = props;
 	const { configuration, more } = formData;
-	const { isSummary, rowSortType, columnSortType } = more;
+	const { isSummary, filterInfo,rowSortType, columnSortType } = more;
 	const { rowDimensions, columnDimensions, valueDimensions, viewId } = configuration;
+
 	const fields = useFields(viewId);
 	const records = useRecords(viewId);
   const [indicatorSide] = useState('top');
+
+ 
+
 
 	const handledValueDimensions = useMemo(() => {
 		return valueDimensions.map((dim, index) => {
@@ -82,6 +86,7 @@ export const PivotTable: FC<ITableProps> = memo((props) => {
 		}).filter(Boolean);
 	}, [columnDimensions, fields]);
 
+
 	// 由于 valueFields 返回的顺序与 valueFieldIds 不一致，此处再次进行排序
 	const valueConfigs = useMemo(() => {
 		return handledValueDimensions.map((dim) => {
@@ -115,6 +120,7 @@ export const PivotTable: FC<ITableProps> = memo((props) => {
 			rowConfigs, 
 			columnConfigs, 
 			valueConfigs,
+			filterInfo
 		} as ITableBaseProps);
 	}, [rowConfigs, columnConfigs, valueConfigs]);
 
@@ -234,8 +240,8 @@ export const PivotTable: FC<ITableProps> = memo((props) => {
 			}}
 			defaultColumnWidth={150}
 			{...baseTableProps}
-			components={{
-				EmptyContent: DefaultEmptyContent
+			components={{				
+				EmptyContent: (baseTableProps.columns.length === 1 && baseTableProps.dataSource.length === 0) ? DefaultEmptyContent : FilterResultEmptyContent
 			}}
 		/>
 	);

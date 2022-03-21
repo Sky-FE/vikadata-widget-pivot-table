@@ -175,6 +175,14 @@
 		"pivot_setting_help_url": {
 				"zh_CN": "/help/intro-widget-pivot/",
 				"en_US": "/help/intro-widget-pivot/"
+		},
+		"pivot_filter_info": {
+			"zh_CN": "新增筛选条件（多个筛选按“且”运算）",
+			"en_US": "Add filtering criteria (Logical Conjunction)"
+		},
+		"pivot_equal": {
+			"zh_CN": "等于",
+			"en_US": "is..."
 		}
 	}
 }

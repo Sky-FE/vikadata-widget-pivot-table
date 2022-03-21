@@ -333,9 +333,9 @@ export class FormSchema {
         },
         filterInfo: {
           type: 'array',
-          title: t(Strings.pivot_add_filter),
+          title: t(Strings.pivot_filter_info),
           minItems: 0,
-          maxItems: MAX_ITEMS,
+          maxItems: 5,
           uniqueItems: false,
           items: {
             type: 'object',

@@ -21,6 +21,7 @@ export interface IFormDataProps {
   };
   more: {
     isSummary: boolean;
+    addFilter: any;
     rowSortType: SortType;
     columnSortType: SortType;
   }
@@ -315,7 +316,14 @@ export class FormSchema {
   }
 
   getMoreFormJSON() {
+    // const { configuration } = this.formData;
+    // const { rowDimensions, columnDimensions } = configuration;
+    // const rowFieldIds = rowDimensions.map(d => d.fieldId);
+    // const columnFieldIds = columnDimensions.map(d => d.fieldId);
+    const valueFields = this.fields.map(d=>d)
+
     return {
+      
       type: 'object',
       title: t(Strings.pivot_more_settings),
       properties: {
@@ -323,6 +331,34 @@ export class FormSchema {
           type: 'boolean',
           title: t(Strings.pivot_summary_option),
           description: t(Strings.pivot_summary_option)
+        },
+        addFilter: {
+          type: 'array',
+          title: t(Strings.pivot_add_filter),
+          minItems: 0,
+          maxItems: MAX_ITEMS,
+          uniqueItems: false,
+          items: {
+            type: 'object',
+            required: false,
+            properties: {
+              fieldId: {
+                type: 'string',
+                enum: valueFields.map(field => field.id),
+                enumNames: valueFields.map(field => field.name),
+              },
+              operatorSymbol: {
+                type: 'string',
+                enum: ['='],
+                enumNames: [t(Strings.pivot_equal)],
+                default: '='
+              },
+              filterValue: {
+                type: 'string',
+              }
+            }
+            
+          },
         },
         rowSortType: {
           type: 'string',

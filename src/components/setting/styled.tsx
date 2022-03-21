@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 
 export const FormWrapper = styled.div<{ openSetting: boolean, readOnly: boolean }>`
   box-shadow: -1px 0px 0px rgba(0, 0, 0, 0.1), 0px -1px 0px #F0F0F6;
-  width: 320px;
+  width: 450px;
   flex-shrink: 0;
   height: 100%;
   padding: 1rem;
